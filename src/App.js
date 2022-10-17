@@ -36,7 +36,7 @@ const dummyList = [
 
 function App() {
 
-  const [data, setDate] = useState([]);
+  const [data, setData] = useState([]);
 
   const dataId = useRef(0);
 
@@ -50,13 +50,28 @@ function App() {
       id: dataId.current,
     }
     dataId.current += 1;
-    setDate([newItem, ...data])
+    setData([newItem, ...data])
+  }
+
+  const onRemove = (targetId) => {
+    console.log(`${targetId}가 삭제되었습니다`)
+    const newDiaryList = data.filter((it) => it.id !== targetId);
+    console.log(newDiaryList)
+    setData(newDiaryList);
+  }
+
+  const onEdit = (targetId, newContent) => {
+    setData(
+      data.map((it) => 
+        it.id === targetId ? {...it, content:newContent} : it
+      )
+    )
   }
 
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate}/>
-      <DiaryList diaryList={data}/>
+      <DiaryList diaryList={data} onRemove={onRemove} onEdit={onEdit}/>
     </div>
   );
 }
